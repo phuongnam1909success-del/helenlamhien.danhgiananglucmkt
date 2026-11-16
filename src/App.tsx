@@ -28,6 +28,7 @@ export default function App() {
   const [calcStatus, setCalcStatus] = useState('Đang tổng hợp trải nghiệm thực hành...');
   const [animatedTotal, setAnimatedTotal] = useState(0);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'saved' | 'offline'>('idle');
+  const [copiedToast, setCopiedToast] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const confettiCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -132,7 +133,7 @@ export default function App() {
   const handleFinishTest = async (finalAnswers: Record<string, number>) => {
     setView('calculating');
     setCalcPercent(10);
-    setCalcStatus('Đang tổng hợp 5 trụ cột thực hành...');
+    setCalcStatus('Đang tổng hợp ma trận trải nghiệm thực hành...');
 
     const scores = QUESTIONS.map((q) => ({ ...q, score: finalAnswers[q.id] || 1 }));
     const total = scores.reduce((sum, item) => sum + item.score, 0);
@@ -151,12 +152,12 @@ export default function App() {
 
     setTimeout(() => {
       setCalcPercent(42);
-      setCalcStatus('Đang vẽ biểu đồ mạng nhện năng lực...');
+      setCalcStatus('Đang đối chiếu với The Talent Framework...');
     }, 450);
 
     setTimeout(() => {
       setCalcPercent(78);
-      setCalcStatus('Đang cá nhân hóa gợi ý kỹ năng...');
+      setCalcStatus('Đang tạo các task hành động cụ thể để nâng cao năng lực...');
     }, 950);
 
     const saved = await gasPromise;
@@ -164,7 +165,7 @@ export default function App() {
 
     setTimeout(() => {
       setCalcPercent(100);
-      setCalcStatus('Mở khóa thành công hồ sơ Marketer!');
+      setCalcStatus('Hoàn tất ma trận năng lực!');
       setView('results');
       playLevelUpSound();
       launchConfetti();
@@ -198,8 +199,44 @@ export default function App() {
   const weakest = sortedScores[sortedScores.length - 1];
   const letters = ['A', 'B', 'C', 'D', 'E'];
 
+  const copyMatrixAndActions = async () => {
+    const text = [
+      'REFLECT – MY TALENT SNAPSHOT',
+      'Ma trận năng lực ứng với The Talent Framework — Không phải bài đánh giá năng lực chuẩn hóa hay cấp chứng chỉ.',
+      `Tổng điểm tham khảo: ${totalScore} / 25 điểm (${currentLevel.title})`,
+      '',
+      ...resultScores.map((item) => {
+        const step = item.steps[item.score - 1];
+        return [
+          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+          `Trụ cột: ${item.pillarEn} (${item.pillarVi}) - Mức ${item.score}/5`,
+          `• TASK THỰC HÀNH: ${step.do}`,
+          `• BẮT ĐẦU TRONG 24H: ${step.first}`,
+          `• HOẠT ĐỘNG CLB/NHÓM: ${step.club}`,
+          `• ĐẦU RA CẦN NỘP: ${step.proof}`,
+          `• TIÊU CHÍ KIỂM CHỨNG: ${step.check}`,
+        ].join('\n');
+      }),
+    ].join('\n\n');
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedToast(true);
+      setTimeout(() => setCopiedToast(false), 2500);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopiedToast(true);
+      setTimeout(() => setCopiedToast(false), 2500);
+    }
+  };
+
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen font-sans text-white">
       <canvas ref={confettiCanvasRef} className="fixed inset-0 pointer-events-none z-50" />
 
       {/* Animated Peacock Teal (#0c4348) & Cyan (#5ce1e6) Light Waves */}
@@ -239,9 +276,9 @@ export default function App() {
 
       {/* Header */}
       <header className="relative z-20 w-full max-w-md md:max-w-5xl mx-auto px-4 pt-4 md:px-8 flex items-center justify-between">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-pill text-xs font-title font-bold text-[#5ce1e6]">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-title tracking-wider text-[#5ce1e6]">
           <span className="w-2 h-2 rounded-full bg-[#5ce1e6] animate-pulse" />
-          <span>READY TO WORK?</span>
+          <span>READY TO WORK? · THE TALENT FRAMEWORK</span>
         </div>
         <button
           type="button"
@@ -250,12 +287,12 @@ export default function App() {
             setSoundEnabled(next);
             if (next) playSelectSound();
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-pill text-xs text-white hover:border-[#5ce1e6] transition"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill text-xs text-white hover:border-[#5ce1e6] transition"
         >
           <span className="text-[#5ce1e6]">
             <SoundSymbol enabled={soundEnabled} />
           </span>
-          <span className="font-script text-sm">{soundEnabled ? 'Âm thanh: Bật' : 'Âm thanh: Tắt'}</span>
+          <span className="font-sans font-medium">{soundEnabled ? 'Âm thanh: Bật' : 'Âm thanh: Tắt'}</span>
         </button>
       </header>
 
@@ -276,11 +313,11 @@ export default function App() {
                 {/* THE SHIFT Interactive Strip */}
                 <div className="glass-card rounded-2xl p-3.5 md:p-4">
                   <div className="flex items-center justify-between mb-2.5 gap-2">
-                    <span className="font-title text-xs font-bold uppercase tracking-wider text-[#5ce1e6] inline-flex items-center gap-1.5">
+                    <span className="font-title text-sm tracking-wider text-[#5ce1e6] inline-flex items-center gap-1.5">
                       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
-                      <span>THE SHIFT — Cuộc chuyển dịch của Marketer</span>
+                      <span>THE SHIFT — CUỘC CHUYỂN DỊCH CỦA MARKETER</span>
                     </span>
                     <button
                       type="button"
@@ -288,12 +325,12 @@ export default function App() {
                         setShiftFlipped(!shiftFlipped);
                         playSelectSound();
                       }}
-                      className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-[#5ce1e6] text-black font-title font-bold hover:bg-white transition shrink-0"
+                      className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-[#5ce1e6] text-black font-title tracking-wider hover:bg-white transition shrink-0"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
-                      <span>Lật thẻ</span>
+                      <span>LẬT THẺ</span>
                     </button>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
@@ -306,10 +343,10 @@ export default function App() {
                             : 'bg-black/45 text-white border-white/20'
                         }`}
                       >
-                        <div className={`font-title text-[9px] font-bold uppercase tracking-wider mb-1 ${shiftFlipped ? 'text-black/75' : 'text-[#5ce1e6]'}`}>
+                        <div className={`font-title text-xs tracking-wider mb-1 ${shiftFlipped ? 'text-black/75' : 'text-[#5ce1e6]'}`}>
                           {shiftFlipped ? 'ĐANG CHUYỂN DỊCH' : 'TRƯỚC ĐÂY'}
                         </div>
-                        <div className="font-script text-sm leading-tight font-semibold">
+                        <div className="font-sans text-xs md:text-sm leading-tight font-medium">
                           {shiftFlipped ? item.after : item.before}
                         </div>
                       </div>
@@ -320,23 +357,31 @@ export default function App() {
 
               <div className="md:col-span-5 flex flex-col gap-4">
                 <div className="glass-card rounded-2xl p-4 md:p-6 space-y-3.5">
-                  <h1 className="font-title text-xl md:text-2xl font-extrabold leading-snug text-white">
+                  <h1 className="font-title text-2xl md:text-3xl tracking-wide leading-snug text-white">
                     ĐIỀU GÌ KHIẾN DOANH NGHIỆP <span className="text-[#5ce1e6]">CHỌN BẠN</span>?
                   </h1>
-                  <p className="font-script text-lg md:text-xl text-white/95 leading-relaxed">
-                    Nếu 100 ứng viên đều biết Canva, CapCut và AI — năng lực hành động thật sự sẽ chứng minh bạn đã sẵn sàng.
-                  </p>
+                  
+                  {/* Notice FrameWork & Practice Disclaimer */}
+                  <div className="rounded-xl bg-[#5ce1e6]/10 border border-[#5ce1e6]/40 p-3.5 text-xs md:text-sm leading-relaxed text-white/95 space-y-1.5">
+                    <div className="font-title text-xs text-[#5ce1e6] tracking-wider uppercase flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#5ce1e6]" />
+                      <span>Ý NGHĨA BÀI TỰ PHẢN TƯ</span>
+                    </div>
+                    <p>
+                      <strong>Đây không phải bài kiểm tra hoặc đánh giá năng lực.</strong> Kết quả được thể hiện dưới dạng <strong>ma trận năng lực (Talent Matrix)</strong> ứng với <strong>The Talent Framework</strong>, giúp bạn định vị trải nghiệm thực hành hiện tại và nhận <strong>gợi ý các hoạt động, task cụ thể để nâng cao năng lực</strong>.
+                    </p>
+                  </div>
 
                   <div className="pt-1">
-                    <div className="flex items-center justify-between text-[11px] text-[#5ce1e6] font-title font-bold mb-2 uppercase tracking-wider">
+                    <div className="flex items-center justify-between text-xs text-[#5ce1e6] font-title tracking-wider mb-2">
                       <span className="inline-flex items-center gap-1.5">
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                           <circle cx="12" cy="12" r="9" />
                           <circle cx="12" cy="12" r="4" />
                         </svg>
-                        <span>Mở khóa 5 Trụ Cột Năng Lực</span>
+                        <span>5 TRỤ CỘT THE TALENT FRAMEWORK</span>
                       </span>
-                      <span>0 / 5</span>
+                      <span>5 CÂU HỎI</span>
                     </div>
                     <div className="grid grid-cols-5 gap-1.5 text-center">
                       {QUESTIONS.map((q) => (
@@ -344,7 +389,7 @@ export default function App() {
                           <div className="text-[#5ce1e6] mb-1 flex justify-center">
                             <PillarSymbol pillar={q.key} />
                           </div>
-                          <div className="text-[9px] font-title font-bold text-white leading-tight">{q.shortLabel}</div>
+                          <div className="text-[10px] font-title tracking-wider text-white leading-tight">{q.shortLabel}</div>
                         </div>
                       ))}
                     </div>
@@ -352,29 +397,29 @@ export default function App() {
 
                   <div className="grid grid-cols-3 gap-2 pt-1">
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm font-bold text-[#5ce1e6]">05 Câu</div>
-                      <div className="font-script text-sm text-white/90">Tình huống</div>
+                      <div className="font-title text-sm text-[#5ce1e6]">05 CÂU</div>
+                      <div className="font-sans text-xs text-white/90">Trải nghiệm</div>
                     </div>
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm font-bold text-white">~5 Phút</div>
-                      <div className="font-script text-sm text-white/90">Tự phản tư</div>
+                      <div className="font-title text-sm text-white">~5 PHÚT</div>
+                      <div className="font-sans text-xs text-white/90">Tự phản tư</div>
                     </div>
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm font-bold text-[#5ce1e6]">100 XP</div>
-                      <div className="font-script text-sm text-white/90">Mở Radar</div>
+                      <div className="font-title text-sm text-[#5ce1e6]">MA TRẬN</div>
+                      <div className="font-sans text-xs text-white/90">Gợi ý task</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="rounded-xl bg-black/50 border border-[#5ce1e6]/40 p-3.5 flex gap-3 items-start backdrop-blur-md">
-                  <div className="w-7 h-7 rounded-lg bg-[#5ce1e6] text-black flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#5ce1e6] text-black flex items-center justify-center shrink-0 mt-0.5">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <div className="font-script text-base text-white/95 leading-snug">
-                    <span className="font-title text-xs font-bold text-[#5ce1e6] uppercase block mb-0.5">Nguyên tắc đánh giá:</span>
-                    “Chọn MỘT phương án phù hợp nhất với những gì bạn đã thực sự làm; không chọn theo điều bạn nghĩ mình có thể làm.”
+                  <div className="font-sans text-xs md:text-sm text-white/95 leading-relaxed">
+                    <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-0.5">NGUYÊN TẮC THAM GIA:</span>
+                    “Hãy chọn điều bạn đã thực sự làm, không phải điều bạn nghĩ mình có thể làm. Mỗi câu chỉ cần chọn 1 mức từ 1–5.”
                   </div>
                 </div>
 
@@ -384,16 +429,16 @@ export default function App() {
                     <button
                       type="button"
                       onClick={startNewSession}
-                      className="relative w-full btn-primary-glow font-title font-extrabold text-base py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tracking-wide"
+                      className="relative w-full btn-primary-glow font-title text-lg py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tracking-wider"
                     >
-                      <span>THAM GIA ĐÁNH GIÁ NGAY</span>
+                      <span>BẮT ĐẦU TỰ PHẢN TƯ NGAY</span>
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
                     </button>
                   </div>
-                  <p className="text-center font-script text-base text-white/80 mt-2">
-                    Phương án được xáo trộn ngẫu nhiên • Không thu thập thông tin cá nhân
+                  <p className="text-center font-sans text-xs text-white/80 mt-2">
+                    Không thu thập họ tên hoặc email • Hoàn toàn bảo mật
                   </p>
                 </div>
               </div>
@@ -407,10 +452,10 @@ export default function App() {
             <div className="space-y-4">
               <div className="glass-card rounded-2xl p-4 space-y-3">
                 <div className="flex items-center justify-between text-xs md:text-sm">
-                  <span className="font-title font-bold text-[#5ce1e6] tracking-wider">
+                  <span className="font-title text-sm tracking-wider text-[#5ce1e6]">
                     NHIỆM VỤ {String(currentIndex + 1).padStart(2, '0')} / {String(QUESTIONS.length).padStart(2, '0')}
                   </span>
-                  <span className="px-3 py-0.5 rounded-full bg-[#5ce1e6] text-black font-title font-extrabold text-xs">
+                  <span className="px-3 py-0.5 rounded-full bg-[#5ce1e6] text-black font-title text-xs tracking-wider">
                     {completedCount * 20} / 100 XP
                   </span>
                 </div>
@@ -427,7 +472,7 @@ export default function App() {
                         <div className={`mb-0.5 flex justify-center ${isDone ? 'text-black' : 'text-[#5ce1e6]'}`}>
                           {isDone ? <CheckSymbol /> : <PillarSymbol pillar={item.key} />}
                         </div>
-                        <div className="text-[9px] font-title font-bold leading-tight">{item.shortLabel}</div>
+                        <div className="text-[10px] font-title tracking-wider leading-tight">{item.shortLabel}</div>
                       </div>
                     );
                   })}
@@ -445,21 +490,21 @@ export default function App() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#5ce1e6] shadow-[0_0_10px_#5ce1e6]" />
-                    <span className="text-xs md:text-sm font-title font-bold uppercase tracking-wider text-[#5ce1e6]">
-                      {currentQ.pillarEn} • {currentQ.pillarVi}
+                    <span className="text-sm font-title tracking-wider text-[#5ce1e6]">
+                      {currentQ.pillarEn.toUpperCase()} • {currentQ.pillarVi}
                     </span>
                   </div>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full border border-white/25 bg-black/40 text-white font-title font-bold">
-                    Bài toán: {currentQ.bizImpact}
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-white/25 bg-black/40 text-white font-title tracking-wider">
+                    BÀI TOÁN: {currentQ.bizImpact}
                   </span>
                 </div>
 
-                <h2 className="font-title text-lg md:text-xl font-bold text-white leading-snug">
+                <h2 className="font-title text-xl md:text-2xl text-white leading-snug tracking-wide">
                   {currentQ.question}
                 </h2>
 
-                <p className="font-script text-lg text-[#5ce1e6]">
-                  Hãy chọn 1 phương án đúng nhất với trải nghiệm thực tế của bạn:
+                <p className="font-sans text-sm text-[#5ce1e6]">
+                  Hãy chọn 1 phương án đúng nhất với trải nghiệm thực tế bạn đã làm:
                 </p>
 
                 <div className="space-y-2.5 md:space-y-3">
@@ -476,13 +521,13 @@ export default function App() {
                         className={`option-card w-full text-left rounded-xl p-3.5 md:p-4 flex items-start gap-3 ${isSelected ? 'selected' : ''}`}
                       >
                         <span
-                          className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-title font-bold shrink-0 mt-0.5 ${
-                            isSelected ? 'bg-[#5ce1e6] text-black' : 'bg-[#0c4348] text-white border border-white/25'
+                          className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-title tracking-wider shrink-0 mt-0.5 ${
+                            isSelected ? 'bg-[#5ce1e6] text-black font-extrabold' : 'bg-[#0c4348] text-white border border-white/25'
                           }`}
                         >
                           {letters[idx]}
                         </span>
-                        <span className={`font-script text-lg leading-snug ${isSelected ? 'text-white font-semibold' : 'text-white/90'}`}>
+                        <span className={`font-sans text-sm md:text-base leading-relaxed ${isSelected ? 'text-white font-semibold' : 'text-white/90'}`}>
                           {opt.text}
                         </span>
                       </button>
@@ -500,9 +545,9 @@ export default function App() {
                     playNextSound();
                     setCurrentIndex((i) => i - 1);
                   }}
-                  className="px-5 py-3.5 rounded-xl border border-[#5ce1e6]/40 bg-black/50 text-white font-title text-xs md:text-sm font-bold hover:bg-[#0c4348] transition"
+                  className="px-5 py-3.5 rounded-xl border border-[#5ce1e6]/40 bg-black/50 text-white font-title text-xs md:text-sm tracking-wider hover:bg-[#0c4348] transition"
                 >
-                  ← Quay lại
+                  ← QUAY LẠI
                 </button>
               )}
               <button
@@ -517,9 +562,9 @@ export default function App() {
                     handleFinishTest(answers);
                   }
                 }}
-                className="flex-1 btn-primary-glow font-title font-extrabold text-sm md:text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-2"
+                className="flex-1 btn-primary-glow font-title text-base md:text-lg py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 tracking-wider"
               >
-                <span>{currentIndex === QUESTIONS.length - 1 ? 'HOÀN THÀNH & MỞ KHÓA KẾT QUẢ' : 'CÂU TIẾP THEO'}</span>
+                <span>{currentIndex === QUESTIONS.length - 1 ? 'HOÀN THÀNH & XEM MA TRẬN NĂNG LỰC' : 'CÂU TIẾP THEO'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -540,11 +585,11 @@ export default function App() {
                 style={{ background: 'conic-gradient(from 0deg, rgba(92,225,230,0.55) 0deg, transparent 75deg)' }}
               />
               <div className="relative z-10 w-16 h-16 rounded-full bg-[#0c4348] border-2 border-[#5ce1e6] flex items-center justify-center shadow-[0_0_24px_rgba(92,225,230,0.5)]">
-                <span className="font-title font-extrabold text-lg text-white">{calcPercent}%</span>
+                <span className="font-title text-xl text-white tracking-wider">{calcPercent}%</span>
               </div>
             </div>
-            <h2 className="font-title text-xl font-extrabold text-white mb-2">ĐANG MỞ KHÓA HỒ SƠ NĂNG LỰC</h2>
-            <p className="font-script text-xl text-[#5ce1e6] min-h-[28px]">{calcStatus}</p>
+            <h2 className="font-title text-2xl text-white mb-2 tracking-wide">ĐANG TẠO MA TRẬN NĂNG LỰC</h2>
+            <p className="font-sans text-sm md:text-base text-[#5ce1e6] min-h-[28px]">{calcStatus}</p>
             <div className="w-64 h-2 rounded-full bg-black/60 mt-5 overflow-hidden border border-[#5ce1e6]/30">
               <div className="h-full bg-[#5ce1e6] transition-all duration-300" style={{ width: `${calcPercent}%` }} />
             </div>
@@ -553,142 +598,203 @@ export default function App() {
 
         {/* VIEW 4: RESULTS */}
         {view === 'results' && (
-          <section className="w-full pb-6 animate-in">
+          <section className="w-full pb-8 animate-in space-y-6">
+            {/* Top Disclaimer Banner */}
+            <div className="glass-card rounded-2xl p-4 md:p-6 border-[#5ce1e6]/60 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-[#5ce1e6] shadow-[0_0_10px_#5ce1e6] animate-pulse" />
+                <h2 className="font-title text-xl md:text-2xl text-[#5ce1e6] tracking-wide">
+                  YOUR TALENT SNAPSHOT — MA TRẬN NĂNG LỰC CỦA BẠN
+                </h2>
+              </div>
+              <p className="font-sans text-sm md:text-base leading-relaxed text-white/95">
+                Đối chiếu 5 trải nghiệm vừa chọn với <strong>The Talent Framework</strong>. <strong>Đây không phải bài đánh giá năng lực kết luận mức năng lực thực tế</strong> của bạn, mà là kết quả dạng <strong>ma trận năng lực</strong> phản ánh mức độ trải nghiệm thực hành do bạn tự báo cáo, đi kèm <strong>gợi ý các hoạt động & task cụ thể</strong> để bạn chủ động nâng cao năng lực.
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 items-start">
+              {/* Left Column: Summary Badge & Radar Chart */}
               <div className="md:col-span-5 space-y-4">
                 <div className="glass-card rounded-2xl p-5 text-center relative overflow-hidden">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/50 text-[11px] font-title font-bold uppercase tracking-wider text-[#5ce1e6] mb-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/50 text-xs font-title tracking-wider text-[#5ce1e6] mb-3">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 15l-3.5 2 .7-3.9L6.4 10.3l3.9-.6L12 6l1.7 3.7 3.9.6-2.8 2.8.7 3.9z" />
                     </svg>
-                    <span>HUY HIỆU SẴN SÀNG CỦA BẠN</span>
+                    <span>MỨC ĐỘ THỰC HÀNH CỦA BẠN</span>
                   </div>
                   <div className="flex items-baseline justify-center gap-1.5 mb-1">
-                    <span className="font-title text-5xl font-extrabold text-white">{animatedTotal}</span>
-                    <span className="font-title text-xl font-bold text-[#5ce1e6]">/ 25 điểm</span>
+                    <span className="font-title text-6xl text-white">{animatedTotal}</span>
+                    <span className="font-title text-xl text-[#5ce1e6]">/ 25 điểm</span>
                   </div>
-                  <div className={`inline-block mt-1 mb-2.5 px-4 py-1.5 rounded-xl font-title font-extrabold text-sm ${currentLevel.badgeClass}`}>
+                  <div className={`inline-block mt-1 mb-2.5 px-4 py-1.5 rounded-xl font-title text-sm tracking-wider ${currentLevel.badgeClass}`}>
                     {currentLevel.title}
                   </div>
-                  <p className="font-script text-lg text-white/95 leading-snug">{currentLevel.desc}</p>
+                  <p className="font-sans text-sm text-white/90 leading-relaxed">{currentLevel.desc}</p>
                   {syncStatus === 'saved' && (
-                    <p className="text-[10px] text-[#5ce1e6] font-title mt-2">✓ Đã ghi nhận kết quả ẩn danh lên hệ thống</p>
+                    <p className="text-xs text-[#5ce1e6] font-title tracking-wider mt-2">✓ ĐÃ GHI NHẬN KẾT QUẢ VÀO GOOGLE SHEET</p>
                   )}
                 </div>
 
                 <div className="glass-card rounded-2xl p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-title text-xs md:text-sm font-bold text-white uppercase tracking-wide">
-                      BIỂU ĐỒ MẠNG NHỆN — TALENT FRAMEWORK
+                    <h3 className="font-title text-sm text-white tracking-wide">
+                      BIỂU ĐỒ MA TRẬN — THE TALENT FRAMEWORK
                     </h3>
-                    <span className="text-[11px] text-[#5ce1e6] font-title font-bold">Thang 1–5</span>
+                    <span className="text-xs text-[#5ce1e6] font-title tracking-wider">THANG 1–5</span>
                   </div>
                   <RadarChart items={resultScores} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="glass-card rounded-2xl p-3.5 border-[#5ce1e6]/60">
-                    <div className="text-[11px] font-title font-bold uppercase text-[#5ce1e6] mb-1 inline-flex items-center gap-1">
+                    <div className="text-xs font-title tracking-wider text-[#5ce1e6] mb-1 inline-flex items-center gap-1">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4l-5.3 2.7 1-5.8-4.2-4.1 5.9-.9L12 3z" />
                       </svg>
                       <span>ĐIỂM TỰA NỔI BẬT</span>
                     </div>
-                    <div className="font-title font-bold text-sm text-white">{strongest.pillarVi}</div>
-                    <div className="font-script text-base text-[#5ce1e6] mt-0.5">
+                    <div className="font-title text-base text-white">{strongest.pillarVi}</div>
+                    <div className="font-sans text-xs text-[#5ce1e6] mt-0.5">
                       {strongest.score}/5 điểm ({strongest.pillarEn})
                     </div>
                   </div>
                   <div className="glass-card rounded-2xl p-3.5 border-white/40">
-                    <div className="text-[11px] font-title font-bold uppercase text-white mb-1 inline-flex items-center gap-1">
+                    <div className="text-xs font-title tracking-wider text-white mb-1 inline-flex items-center gap-1">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                       <span>ƯU TIÊN BÙ ĐẮP</span>
                     </div>
-                    <div className="font-title font-bold text-sm text-white">{weakest.pillarVi}</div>
-                    <div className="font-script text-base text-white/85 mt-0.5">
+                    <div className="font-title text-base text-white">{weakest.pillarVi}</div>
+                    <div className="font-sans text-xs text-white/80 mt-0.5">
                       {weakest.score}/5 điểm ({weakest.pillarEn})
                     </div>
                   </div>
                 </div>
+
+                {/* Quick Copy Action */}
+                <button
+                  type="button"
+                  onClick={copyMatrixAndActions}
+                  className="w-full py-3.5 px-4 rounded-xl border border-[#5ce1e6] bg-[#5ce1e6]/20 text-[#5ce1e6] font-title text-sm tracking-wider hover:bg-[#5ce1e6] hover:text-black transition flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  </svg>
+                  <span>{copiedToast ? '✓ ĐÃ SAO CHÉP MA TRẬN & TASK!' : 'SAO CHÉP MA TRẬN & GỢI Ý HÀNH ĐỘNG'}</span>
+                </button>
               </div>
 
+              {/* Right Column: Detailed Practical Tasks / Action Cards */}
               <div className="md:col-span-7 space-y-4">
-                <div className="glass-card rounded-2xl p-4 md:p-5 space-y-3.5">
-                  <h3 className="font-title text-sm font-bold text-white uppercase tracking-wide">
-                    PHÂN TÍCH CHI TIẾT & KỸ NĂNG CẦN BỔ SUNG
-                  </h3>
-                  <div className="space-y-3">
+                <div className="glass-card rounded-2xl p-4 md:p-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-title text-lg md:text-xl text-white tracking-wide">
+                        YOUR NEXT MOVE · GỢI Ý THỰC HÀNH CỤ THỂ
+                      </h3>
+                      <p className="font-sans text-xs md:text-sm text-white/80 mt-0.5">
+                        Dưới đây là 5 task gợi ý cá nhân hóa theo mức vừa chọn. Mỗi task có bước khởi động 24h, đầu ra minh chứng và tiêu chí kiểm chứng.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
                     {resultScores.map((item) => {
-                      const pct = (item.score / 5) * 100;
-                      const statusTag = item.score <= 2 ? 'Cần khởi động' : item.score === 3 ? 'Cần tự chủ' : 'Vững vàng';
-                      const advice = item.score <= 2 ? item.adviceLow : item.score === 3 ? item.adviceMid : item.adviceHigh;
+                      const step = item.steps[item.score - 1];
+                      const tagLabel = item.score === 5 ? 'Mức 5 · Mở rộng' : `Mức ${item.score} → Mức ${item.score + 1}`;
                       return (
-                        <div key={item.id} className="rounded-xl bg-black/45 border border-[#5ce1e6]/30 p-3.5 space-y-2">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-[#5ce1e6] shrink-0">
-                                <PillarSymbol pillar={item.key} />
+                        <div key={item.id} className="rounded-2xl bg-black/45 border border-[#5ce1e6]/35 p-4 space-y-3">
+                          <div className="flex items-start justify-between gap-2 border-b border-white/10 pb-2.5">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[#5ce1e6]">
+                                  <PillarSymbol pillar={item.key} />
+                                </span>
+                                <h4 className="font-title text-base text-white tracking-wide">
+                                  {item.pillarEn.toUpperCase()} — {item.pillarVi}
+                                </h4>
+                              </div>
+                              <span className="font-sans text-xs text-[#5ce1e6]">
+                                Điểm tự báo cáo: <strong>{item.score}/5</strong>
                               </span>
-                              <span className="font-title font-bold text-xs sm:text-sm text-white">{item.pillarVi}</span>
                             </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#0c4348] text-[#5ce1e6] border border-[#5ce1e6]/40 font-title font-bold">
-                                {statusTag}
+                            <span className="text-xs px-2.5 py-1 rounded-full bg-[#5ce1e6]/20 border border-[#5ce1e6]/60 text-[#5ce1e6] font-title tracking-wider shrink-0">
+                              {tagLabel}
+                            </span>
+                          </div>
+
+                          {/* Action Items */}
+                          <div className="space-y-2 text-xs md:text-sm font-sans leading-relaxed">
+                            <div className="bg-[#0c4348]/60 border border-[#5ce1e6]/30 rounded-xl p-3">
+                              <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-1">
+                                🎯 TASK THỰC HÀNH CỤ THỂ:
                               </span>
-                              <span className="font-title font-extrabold text-sm text-[#5ce1e6]">{item.score}/5</span>
+                              <p className="text-white/95 font-medium">{step.do}</p>
+                            </div>
+
+                            <div className="bg-white/10 border-l-4 border-[#5ce1e6] rounded-xl p-3">
+                              <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-1">
+                                ⚡ BẮT ĐẦU TRONG 24H:
+                              </span>
+                              <p className="text-white/95">{step.first}</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
+                              <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
+                                <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
+                                  👥 THAM GIA CLB / NHÓM:
+                                </span>
+                                <p className="text-white/85 text-xs">{step.club}</p>
+                              </div>
+                              <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
+                                <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
+                                  📦 ĐẦU RA CẦN NỘP:
+                                </span>
+                                <p className="text-white/85 text-xs">{step.proof}</p>
+                              </div>
+                            </div>
+
+                            <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
+                              <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
+                                🔍 TIÊU CHÍ KIỂM CHỨNG:
+                              </span>
+                              <p className="text-white/85 text-xs">{step.check}</p>
                             </div>
                           </div>
-                          <div className="w-full h-2 rounded-full bg-black/70 overflow-hidden border border-white/10">
-                            <div className="h-full rounded-full transition-all duration-700 bg-[#5ce1e6]" style={{ width: `${pct}%` }} />
-                          </div>
-                          <p className="font-script text-base text-white/95 leading-snug">
-                            <strong className="font-title text-xs uppercase text-[#5ce1e6] mr-1">Gợi ý:</strong>
-                            {advice}
-                          </p>
                         </div>
                       );
                     })}
                   </div>
                 </div>
 
+                {/* Self Reflection Prompt Box */}
                 <div className="glass-card rounded-2xl p-4 md:p-5 space-y-3 border-[#5ce1e6]/45">
-                  <h3 className="font-title text-sm font-bold text-[#5ce1e6] uppercase tracking-wide">
-                    HOẠT ĐỘNG PHẢN TƯ & BƯỚC TIẾP THEO
-                  </h3>
-                  <p className="font-script text-lg text-white/95 leading-snug">
-                    Hãy nhớ lại 01 ví dụ thực tế giải thích vì sao bạn chọn mức điểm ở năng lực cao nhất và thấp nhất. Doanh nghiệp đang tìm Marketer giải quyết 4 bài toán:
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#5ce1e6]">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </span>
+                    <h4 className="font-title text-base text-[#5ce1e6] tracking-wide">
+                      CÂU HỎI TỰ PHẢN TƯ DÀNH CHO BẠN
+                    </h4>
+                  </div>
+                  <p className="font-sans text-sm md:text-base text-white/95 leading-relaxed bg-[#0c4348]/70 border border-[#5ce1e6]/30 rounded-xl p-3.5">
+                    “Với năng lực bạn muốn phát triển nhất, sản phẩm hoặc phản hồi nào trong <strong>30 ngày tới</strong> sẽ chứng minh rằng bạn đã thực sự thực hành?”
                   </p>
-                  <div className="grid grid-cols-4 gap-2 text-center">
-                    {[
-                      { en: 'REACH', vi: 'Tiếp cận' },
-                      { en: 'CONVERT', vi: 'Thúc đẩy' },
-                      { en: 'OPTIMIZE', vi: 'Tối ưu' },
-                      { en: 'RETAIN', vi: 'Giữ chân' },
-                    ].map((b) => (
-                      <div key={b.en} className="rounded-xl bg-black/50 border border-[#5ce1e6]/35 py-2.5 px-1">
-                        <div className="font-title text-[10px] md:text-xs font-bold text-[#5ce1e6]">{b.en}</div>
-                        <div className="font-script text-sm text-white">{b.vi}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="font-script text-base md:text-lg text-white bg-[#0c4348]/80 border border-[#5ce1e6]/40 rounded-xl p-3 leading-snug">
-                    <strong className="font-title text-xs uppercase text-[#5ce1e6] mr-1">Your Next Move:</strong>
-                    Thực hành thật • Học công cụ mới • Làm dự án cùng đội nhóm • Nhận cố vấn từ mentor.
-                  </div>
+                  <p className="font-sans text-xs text-white/75 leading-relaxed">
+                    <strong>Lưu ý phương pháp:</strong> Đây là hoạt động tự phản tư nhanh, không phải công cụ đánh giá năng lực chuẩn hóa, chứng nhận kỹ năng hay dự báo tuyển dụng. Hãy chọn 01 task phù hợp nhất với mục tiêu của bạn để bắt đầu ngay!
+                  </p>
                 </div>
 
-                <p className="font-script text-base text-white/75 text-center md:text-left leading-snug px-1">
-                  * Lưu ý phương pháp: Đây là công cụ tự phản tư nhanh về trải nghiệm thực hành do bạn tự báo cáo; không dùng để xếp loại năng lực chuyên môn.
-                </p>
-
+                {/* Actions & Retake */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   <a
                     href="https://www.helenlamhien.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary-glow font-title font-extrabold text-xs sm:text-sm py-4 px-4 rounded-2xl flex items-center justify-center gap-2 no-underline text-center"
+                    className="btn-primary-glow font-title text-sm md:text-base py-4 px-4 rounded-2xl flex items-center justify-center gap-2 no-underline text-center tracking-wider"
                   >
                     <span>TRUY CẬP HELENLAMHIEN.COM</span>
                     <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -698,12 +804,12 @@ export default function App() {
                   <button
                     type="button"
                     onClick={startNewSession}
-                    className="py-4 px-4 rounded-2xl border border-[#5ce1e6]/50 bg-black/50 text-white font-title font-bold text-xs sm:text-sm hover:bg-[#0c4348] transition inline-flex items-center justify-center gap-2"
+                    className="py-4 px-4 rounded-2xl border border-[#5ce1e6]/50 bg-black/50 text-white font-title text-sm md:text-base tracking-wider hover:bg-[#0c4348] transition inline-flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
-                    <span>Làm lại bài đánh giá</span>
+                    <span>LÀM LẠI BÀI TỰ PHẢN TƯ</span>
                   </button>
                 </div>
               </div>

@@ -2,32 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Đặt file font gốc của bạn vào thư mục public/fonts/ để hiển thị chuẩn 100% */
-@font-face {
-  font-family: 'Helios';
-  src:
-    local('Helios'),
-    local('Helios Bold'),
-    local('SVN-Helios'),
-    url('/fonts/Helios.woff2') format('woff2'),
-    url('/fonts/Helios.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SVN-Androgyne Regular';
-  src:
-    local('SVN-Androgyne Regular'),
-    local('SVN-Androgyne'),
-    url('/fonts/SVN-Androgyne-Regular.woff2') format('woff2'),
-    url('/fonts/SVN-Androgyne-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -35,11 +9,12 @@
 
 body {
   margin: 0;
-  font-family: 'Helios', 'Montserrat', sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   background-color: #0c4348;
   color: #ffffff;
   min-height: 100vh;
   overflow-x: hidden;
+  line-height: 1.6;
 }
 
 /* Animated Peacock Teal (#0c4348) & Cyan (#5ce1e6) Light Waves */
@@ -82,7 +57,7 @@ body {
 }
 
 .glass-card {
-  background: linear-gradient(145deg, rgba(12, 67, 72, 0.78), rgba(0, 0, 0, 0.62));
+  background: linear-gradient(145deg, rgba(12, 67, 72, 0.85), rgba(4, 25, 28, 0.75));
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(92, 225, 230, 0.32);

@@ -8,8 +8,9 @@ export default {
         brandTeal: '#0c4348',
       },
       fontFamily: {
-        title: ['Helios', 'Montserrat', 'sans-serif'],
-        script: ['"SVN-Androgyne Regular"', '"Dancing Script"', 'cursive'],
+        title: ['Anton', 'sans-serif'],
+        sans: ['Roboto', 'sans-serif'],
+        body: ['Roboto', 'sans-serif'],
       },
     },
   },
