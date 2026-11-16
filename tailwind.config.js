@@ -8,8 +8,8 @@ export default {
         brandTeal: '#0c4348',
       },
       fontFamily: {
-        title: ['Anton', 'sans-serif'],
         sans: ['Roboto', 'sans-serif'],
+        title: ['Roboto', 'sans-serif'],
         body: ['Roboto', 'sans-serif'],
       },
     },

@@ -210,11 +210,11 @@ export default function App() {
         return [
           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
           `Trụ cột: ${item.pillarEn} (${item.pillarVi}) - Mức ${item.score}/5`,
-          `• TASK THỰC HÀNH: ${step.do}`,
-          `• BẮT ĐẦU TRONG 24H: ${step.first}`,
-          `• HOẠT ĐỘNG CLB/NHÓM: ${step.club}`,
-          `• ĐẦU RA CẦN NỘP: ${step.proof}`,
-          `• TIÊU CHÍ KIỂM CHỨNG: ${step.check}`,
+          `◈ TASK THỰC HÀNH CỤ THỂ: ${step.do}`,
+          `✦ BẮT ĐẦU TRONG 24H: ${step.first}`,
+          `● HOẠT ĐỘNG CLB / NHÓM: ${step.club}`,
+          `■ ĐẦU RA CẦN NỘP: ${step.proof}`,
+          `▲ TIÊU CHÍ KIỂM CHỨNG: ${step.check}`,
         ].join('\n');
       }),
     ].join('\n\n');
@@ -276,7 +276,7 @@ export default function App() {
 
       {/* Header */}
       <header className="relative z-20 w-full max-w-md md:max-w-5xl mx-auto px-4 pt-4 md:px-8 flex items-center justify-between">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-title tracking-wider text-[#5ce1e6]">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-bold tracking-wide text-[#5ce1e6]">
           <span className="w-2 h-2 rounded-full bg-[#5ce1e6] animate-pulse" />
           <span>READY TO WORK? · THE TALENT FRAMEWORK</span>
         </div>
@@ -287,12 +287,12 @@ export default function App() {
             setSoundEnabled(next);
             if (next) playSelectSound();
           }}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill text-xs text-white hover:border-[#5ce1e6] transition"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill text-xs text-white hover:border-[#5ce1e6] transition font-medium"
         >
           <span className="text-[#5ce1e6]">
             <SoundSymbol enabled={soundEnabled} />
           </span>
-          <span className="font-sans font-medium">{soundEnabled ? 'Âm thanh: Bật' : 'Âm thanh: Tắt'}</span>
+          <span>{soundEnabled ? 'Âm thanh: Bật' : 'Âm thanh: Tắt'}</span>
         </button>
       </header>
 
@@ -313,10 +313,8 @@ export default function App() {
                 {/* THE SHIFT Interactive Strip */}
                 <div className="glass-card rounded-2xl p-3.5 md:p-4">
                   <div className="flex items-center justify-between mb-2.5 gap-2">
-                    <span className="font-title text-sm tracking-wider text-[#5ce1e6] inline-flex items-center gap-1.5">
-                      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+                    <span className="text-xs md:text-sm font-bold tracking-wide text-[#5ce1e6] inline-flex items-center gap-1.5">
+                      <span className="text-base text-[#5ce1e6]">✦</span>
                       <span>THE SHIFT — CUỘC CHUYỂN DỊCH CỦA MARKETER</span>
                     </span>
                     <button
@@ -325,11 +323,9 @@ export default function App() {
                         setShiftFlipped(!shiftFlipped);
                         playSelectSound();
                       }}
-                      className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-[#5ce1e6] text-black font-title tracking-wider hover:bg-white transition shrink-0"
+                      className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-[#5ce1e6] text-black font-bold hover:bg-white transition shrink-0"
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
+                      <span className="font-bold text-sm">⇄</span>
                       <span>LẬT THẺ</span>
                     </button>
                   </div>
@@ -343,10 +339,10 @@ export default function App() {
                             : 'bg-black/45 text-white border-white/20'
                         }`}
                       >
-                        <div className={`font-title text-xs tracking-wider mb-1 ${shiftFlipped ? 'text-black/75' : 'text-[#5ce1e6]'}`}>
+                        <div className={`text-[10px] md:text-xs font-bold uppercase tracking-wider mb-1 ${shiftFlipped ? 'text-black/75' : 'text-[#5ce1e6]'}`}>
                           {shiftFlipped ? 'ĐANG CHUYỂN DỊCH' : 'TRƯỚC ĐÂY'}
                         </div>
-                        <div className="font-sans text-xs md:text-sm leading-tight font-medium">
+                        <div className="text-xs md:text-sm leading-tight font-medium">
                           {shiftFlipped ? item.after : item.before}
                         </div>
                       </div>
@@ -357,14 +353,14 @@ export default function App() {
 
               <div className="md:col-span-5 flex flex-col gap-4">
                 <div className="glass-card rounded-2xl p-4 md:p-6 space-y-3.5">
-                  <h1 className="font-title text-2xl md:text-3xl tracking-wide leading-snug text-white">
+                  <h1 className="text-2xl md:text-3xl font-black tracking-tight leading-snug text-white">
                     ĐIỀU GÌ KHIẾN DOANH NGHIỆP <span className="text-[#5ce1e6]">CHỌN BẠN</span>?
                   </h1>
-                  
+
                   {/* Notice FrameWork & Practice Disclaimer */}
                   <div className="rounded-xl bg-[#5ce1e6]/10 border border-[#5ce1e6]/40 p-3.5 text-xs md:text-sm leading-relaxed text-white/95 space-y-1.5">
-                    <div className="font-title text-xs text-[#5ce1e6] tracking-wider uppercase flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#5ce1e6]" />
+                    <div className="text-xs font-bold text-[#5ce1e6] tracking-wider uppercase flex items-center gap-1.5">
+                      <span className="text-[#5ce1e6] text-sm">✦</span>
                       <span>Ý NGHĨA BÀI TỰ PHẢN TƯ</span>
                     </div>
                     <p>
@@ -373,12 +369,9 @@ export default function App() {
                   </div>
 
                   <div className="pt-1">
-                    <div className="flex items-center justify-between text-xs text-[#5ce1e6] font-title tracking-wider mb-2">
+                    <div className="flex items-center justify-between text-xs text-[#5ce1e6] font-bold tracking-wider mb-2">
                       <span className="inline-flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="9" />
-                          <circle cx="12" cy="12" r="4" />
-                        </svg>
+                        <span className="text-sm">◈</span>
                         <span>5 TRỤ CỘT THE TALENT FRAMEWORK</span>
                       </span>
                       <span>5 CÂU HỎI</span>
@@ -389,7 +382,7 @@ export default function App() {
                           <div className="text-[#5ce1e6] mb-1 flex justify-center">
                             <PillarSymbol pillar={q.key} />
                           </div>
-                          <div className="text-[10px] font-title tracking-wider text-white leading-tight">{q.shortLabel}</div>
+                          <div className="text-[10px] font-bold tracking-wide text-white leading-tight">{q.shortLabel}</div>
                         </div>
                       ))}
                     </div>
@@ -397,28 +390,26 @@ export default function App() {
 
                   <div className="grid grid-cols-3 gap-2 pt-1">
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm text-[#5ce1e6]">05 CÂU</div>
-                      <div className="font-sans text-xs text-white/90">Trải nghiệm</div>
+                      <div className="text-sm font-bold text-[#5ce1e6]">05 CÂU</div>
+                      <div className="text-xs text-white/90">Trải nghiệm</div>
                     </div>
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm text-white">~5 PHÚT</div>
-                      <div className="font-sans text-xs text-white/90">Tự phản tư</div>
+                      <div className="text-sm font-bold text-white">~5 PHÚT</div>
+                      <div className="text-xs text-white/90">Tự phản tư</div>
                     </div>
                     <div className="glass-pill rounded-xl py-2 px-2 text-center">
-                      <div className="font-title text-sm text-[#5ce1e6]">MA TRẬN</div>
-                      <div className="font-sans text-xs text-white/90">Gợi ý task</div>
+                      <div className="text-sm font-bold text-[#5ce1e6]">MA TRẬN</div>
+                      <div className="text-xs text-white/90">Gợi ý task</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="rounded-xl bg-black/50 border border-[#5ce1e6]/40 p-3.5 flex gap-3 items-start backdrop-blur-md">
-                  <div className="w-7 h-7 rounded-lg bg-[#5ce1e6] text-black flex items-center justify-center shrink-0 mt-0.5">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  <div className="w-7 h-7 rounded-lg bg-[#5ce1e6] text-black flex items-center justify-center shrink-0 mt-0.5 font-black text-sm">
+                    !
                   </div>
-                  <div className="font-sans text-xs md:text-sm text-white/95 leading-relaxed">
-                    <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-0.5">NGUYÊN TẮC THAM GIA:</span>
+                  <div className="text-xs md:text-sm text-white/95 leading-relaxed">
+                    <span className="text-xs font-bold text-[#5ce1e6] tracking-wider block mb-0.5">NGUYÊN TẮC THAM GIA:</span>
                     “Hãy chọn điều bạn đã thực sự làm, không phải điều bạn nghĩ mình có thể làm. Mỗi câu chỉ cần chọn 1 mức từ 1–5.”
                   </div>
                 </div>
@@ -429,15 +420,13 @@ export default function App() {
                     <button
                       type="button"
                       onClick={startNewSession}
-                      className="relative w-full btn-primary-glow font-title text-lg py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tracking-wider"
+                      className="relative w-full btn-primary-glow font-black text-base md:text-lg py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tracking-wide"
                     >
                       <span>BẮT ĐẦU TỰ PHẢN TƯ NGAY</span>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                      <span className="font-bold text-lg">→</span>
                     </button>
                   </div>
-                  <p className="text-center font-sans text-xs text-white/80 mt-2">
+                  <p className="text-center text-xs text-white/80 mt-2">
                     Không thu thập họ tên hoặc email • Hoàn toàn bảo mật
                   </p>
                 </div>
@@ -452,10 +441,10 @@ export default function App() {
             <div className="space-y-4">
               <div className="glass-card rounded-2xl p-4 space-y-3">
                 <div className="flex items-center justify-between text-xs md:text-sm">
-                  <span className="font-title text-sm tracking-wider text-[#5ce1e6]">
+                  <span className="font-bold tracking-wider text-[#5ce1e6]">
                     NHIỆM VỤ {String(currentIndex + 1).padStart(2, '0')} / {String(QUESTIONS.length).padStart(2, '0')}
                   </span>
-                  <span className="px-3 py-0.5 rounded-full bg-[#5ce1e6] text-black font-title text-xs tracking-wider">
+                  <span className="px-3 py-0.5 rounded-full bg-[#5ce1e6] text-black font-black text-xs tracking-wider">
                     {completedCount * 20} / 100 XP
                   </span>
                 </div>
@@ -472,7 +461,7 @@ export default function App() {
                         <div className={`mb-0.5 flex justify-center ${isDone ? 'text-black' : 'text-[#5ce1e6]'}`}>
                           {isDone ? <CheckSymbol /> : <PillarSymbol pillar={item.key} />}
                         </div>
-                        <div className="text-[10px] font-title tracking-wider leading-tight">{item.shortLabel}</div>
+                        <div className="text-[10px] font-bold leading-tight">{item.shortLabel}</div>
                       </div>
                     );
                   })}
@@ -490,20 +479,20 @@ export default function App() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#5ce1e6] shadow-[0_0_10px_#5ce1e6]" />
-                    <span className="text-sm font-title tracking-wider text-[#5ce1e6]">
+                    <span className="text-xs md:text-sm font-bold uppercase tracking-wider text-[#5ce1e6]">
                       {currentQ.pillarEn.toUpperCase()} • {currentQ.pillarVi}
                     </span>
                   </div>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-white/25 bg-black/40 text-white font-title tracking-wider">
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-white/25 bg-black/40 text-white font-bold">
                     BÀI TOÁN: {currentQ.bizImpact}
                   </span>
                 </div>
 
-                <h2 className="font-title text-xl md:text-2xl text-white leading-snug tracking-wide">
+                <h2 className="text-xl md:text-2xl font-bold text-white leading-snug">
                   {currentQ.question}
                 </h2>
 
-                <p className="font-sans text-sm text-[#5ce1e6]">
+                <p className="text-sm text-[#5ce1e6] font-medium">
                   Hãy chọn 1 phương án đúng nhất với trải nghiệm thực tế bạn đã làm:
                 </p>
 
@@ -521,13 +510,13 @@ export default function App() {
                         className={`option-card w-full text-left rounded-xl p-3.5 md:p-4 flex items-start gap-3 ${isSelected ? 'selected' : ''}`}
                       >
                         <span
-                          className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-title tracking-wider shrink-0 mt-0.5 ${
-                            isSelected ? 'bg-[#5ce1e6] text-black font-extrabold' : 'bg-[#0c4348] text-white border border-white/25'
+                          className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black shrink-0 mt-0.5 ${
+                            isSelected ? 'bg-[#5ce1e6] text-black' : 'bg-[#0c4348] text-white border border-white/25'
                           }`}
                         >
                           {letters[idx]}
                         </span>
-                        <span className={`font-sans text-sm md:text-base leading-relaxed ${isSelected ? 'text-white font-semibold' : 'text-white/90'}`}>
+                        <span className={`text-sm md:text-base leading-relaxed ${isSelected ? 'text-white font-semibold' : 'text-white/90'}`}>
                           {opt.text}
                         </span>
                       </button>
@@ -545,7 +534,7 @@ export default function App() {
                     playNextSound();
                     setCurrentIndex((i) => i - 1);
                   }}
-                  className="px-5 py-3.5 rounded-xl border border-[#5ce1e6]/40 bg-black/50 text-white font-title text-xs md:text-sm tracking-wider hover:bg-[#0c4348] transition"
+                  className="px-5 py-3.5 rounded-xl border border-[#5ce1e6]/40 bg-black/50 text-white font-bold text-xs md:text-sm hover:bg-[#0c4348] transition"
                 >
                   ← QUAY LẠI
                 </button>
@@ -562,12 +551,10 @@ export default function App() {
                     handleFinishTest(answers);
                   }
                 }}
-                className="flex-1 btn-primary-glow font-title text-base md:text-lg py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 tracking-wider"
+                className="flex-1 btn-primary-glow font-black text-sm md:text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 tracking-wide"
               >
                 <span>{currentIndex === QUESTIONS.length - 1 ? 'HOÀN THÀNH & XEM MA TRẬN NĂNG LỰC' : 'CÂU TIẾP THEO'}</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                <span className="font-bold text-lg">→</span>
               </button>
             </div>
           </section>
@@ -585,11 +572,11 @@ export default function App() {
                 style={{ background: 'conic-gradient(from 0deg, rgba(92,225,230,0.55) 0deg, transparent 75deg)' }}
               />
               <div className="relative z-10 w-16 h-16 rounded-full bg-[#0c4348] border-2 border-[#5ce1e6] flex items-center justify-center shadow-[0_0_24px_rgba(92,225,230,0.5)]">
-                <span className="font-title text-xl text-white tracking-wider">{calcPercent}%</span>
+                <span className="text-xl font-black text-white">{calcPercent}%</span>
               </div>
             </div>
-            <h2 className="font-title text-2xl text-white mb-2 tracking-wide">ĐANG TẠO MA TRẬN NĂNG LỰC</h2>
-            <p className="font-sans text-sm md:text-base text-[#5ce1e6] min-h-[28px]">{calcStatus}</p>
+            <h2 className="text-2xl font-black text-white mb-2 tracking-tight">ĐANG TẠO MA TRẬN NĂNG LỰC</h2>
+            <p className="text-sm md:text-base text-[#5ce1e6] font-medium min-h-[28px]">{calcStatus}</p>
             <div className="w-64 h-2 rounded-full bg-black/60 mt-5 overflow-hidden border border-[#5ce1e6]/30">
               <div className="h-full bg-[#5ce1e6] transition-all duration-300" style={{ width: `${calcPercent}%` }} />
             </div>
@@ -602,12 +589,12 @@ export default function App() {
             {/* Top Disclaimer Banner */}
             <div className="glass-card rounded-2xl p-4 md:p-6 border-[#5ce1e6]/60 space-y-2">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-[#5ce1e6] shadow-[0_0_10px_#5ce1e6] animate-pulse" />
-                <h2 className="font-title text-xl md:text-2xl text-[#5ce1e6] tracking-wide">
+                <span className="text-[#5ce1e6] text-lg">✦</span>
+                <h2 className="text-xl md:text-2xl font-black text-[#5ce1e6] tracking-tight">
                   YOUR TALENT SNAPSHOT — MA TRẬN NĂNG LỰC CỦA BẠN
                 </h2>
               </div>
-              <p className="font-sans text-sm md:text-base leading-relaxed text-white/95">
+              <p className="text-sm md:text-base leading-relaxed text-white/95">
                 Đối chiếu 5 trải nghiệm vừa chọn với <strong>The Talent Framework</strong>. <strong>Đây không phải bài đánh giá năng lực kết luận mức năng lực thực tế</strong> của bạn, mà là kết quả dạng <strong>ma trận năng lực</strong> phản ánh mức độ trải nghiệm thực hành do bạn tự báo cáo, đi kèm <strong>gợi ý các hoạt động & task cụ thể</strong> để bạn chủ động nâng cao năng lực.
               </p>
             </div>
@@ -616,57 +603,51 @@ export default function App() {
               {/* Left Column: Summary Badge & Radar Chart */}
               <div className="md:col-span-5 space-y-4">
                 <div className="glass-card rounded-2xl p-5 text-center relative overflow-hidden">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/50 text-xs font-title tracking-wider text-[#5ce1e6] mb-3">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15l-3.5 2 .7-3.9L6.4 10.3l3.9-.6L12 6l1.7 3.7 3.9.6-2.8 2.8.7 3.9z" />
-                    </svg>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/50 text-xs font-bold uppercase tracking-wider text-[#5ce1e6] mb-3">
+                    <span className="text-[#5ce1e6] text-xs">★</span>
                     <span>MỨC ĐỘ THỰC HÀNH CỦA BẠN</span>
                   </div>
                   <div className="flex items-baseline justify-center gap-1.5 mb-1">
-                    <span className="font-title text-6xl text-white">{animatedTotal}</span>
-                    <span className="font-title text-xl text-[#5ce1e6]">/ 25 điểm</span>
+                    <span className="text-5xl md:text-6xl font-black text-white">{animatedTotal}</span>
+                    <span className="text-xl font-bold text-[#5ce1e6]">/ 25 điểm</span>
                   </div>
-                  <div className={`inline-block mt-1 mb-2.5 px-4 py-1.5 rounded-xl font-title text-sm tracking-wider ${currentLevel.badgeClass}`}>
+                  <div className={`inline-block mt-1 mb-2.5 px-4 py-1.5 rounded-xl font-bold text-sm ${currentLevel.badgeClass}`}>
                     {currentLevel.title}
                   </div>
-                  <p className="font-sans text-sm text-white/90 leading-relaxed">{currentLevel.desc}</p>
+                  <p className="text-sm text-white/90 leading-relaxed">{currentLevel.desc}</p>
                   {syncStatus === 'saved' && (
-                    <p className="text-xs text-[#5ce1e6] font-title tracking-wider mt-2">✓ ĐÃ GHI NHẬN KẾT QUẢ VÀO GOOGLE SHEET</p>
+                    <p className="text-xs text-[#5ce1e6] font-bold tracking-wider mt-2">✓ ĐÃ GHI NHẬN KẾT QUẢ VÀO GOOGLE SHEET</p>
                   )}
                 </div>
 
                 <div className="glass-card rounded-2xl p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-title text-sm text-white tracking-wide">
+                    <h3 className="text-sm font-bold text-white tracking-wide">
                       BIỂU ĐỒ MA TRẬN — THE TALENT FRAMEWORK
                     </h3>
-                    <span className="text-xs text-[#5ce1e6] font-title tracking-wider">THANG 1–5</span>
+                    <span className="text-xs text-[#5ce1e6] font-bold">THANG 1–5</span>
                   </div>
                   <RadarChart items={resultScores} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="glass-card rounded-2xl p-3.5 border-[#5ce1e6]/60">
-                    <div className="text-xs font-title tracking-wider text-[#5ce1e6] mb-1 inline-flex items-center gap-1">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4l-5.3 2.7 1-5.8-4.2-4.1 5.9-.9L12 3z" />
-                      </svg>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#5ce1e6] mb-1 inline-flex items-center gap-1">
+                      <span>▲</span>
                       <span>ĐIỂM TỰA NỔI BẬT</span>
                     </div>
-                    <div className="font-title text-base text-white">{strongest.pillarVi}</div>
-                    <div className="font-sans text-xs text-[#5ce1e6] mt-0.5">
+                    <div className="font-bold text-base text-white">{strongest.pillarVi}</div>
+                    <div className="text-xs text-[#5ce1e6] mt-0.5">
                       {strongest.score}/5 điểm ({strongest.pillarEn})
                     </div>
                   </div>
                   <div className="glass-card rounded-2xl p-3.5 border-white/40">
-                    <div className="text-xs font-title tracking-wider text-white mb-1 inline-flex items-center gap-1">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+                    <div className="text-xs font-bold uppercase tracking-wider text-white mb-1 inline-flex items-center gap-1">
+                      <span>▼</span>
                       <span>ƯU TIÊN BÙ ĐẮP</span>
                     </div>
-                    <div className="font-title text-base text-white">{weakest.pillarVi}</div>
-                    <div className="font-sans text-xs text-white/80 mt-0.5">
+                    <div className="font-bold text-base text-white">{weakest.pillarVi}</div>
+                    <div className="text-xs text-white/80 mt-0.5">
                       {weakest.score}/5 điểm ({weakest.pillarEn})
                     </div>
                   </div>
@@ -676,11 +657,9 @@ export default function App() {
                 <button
                   type="button"
                   onClick={copyMatrixAndActions}
-                  className="w-full py-3.5 px-4 rounded-xl border border-[#5ce1e6] bg-[#5ce1e6]/20 text-[#5ce1e6] font-title text-sm tracking-wider hover:bg-[#5ce1e6] hover:text-black transition flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-4 rounded-xl border border-[#5ce1e6] bg-[#5ce1e6]/20 text-[#5ce1e6] font-bold text-sm tracking-wide hover:bg-[#5ce1e6] hover:text-black transition flex items-center justify-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                  </svg>
+                  <span className="text-base font-bold">⧉</span>
                   <span>{copiedToast ? '✓ ĐÃ SAO CHÉP MA TRẬN & TASK!' : 'SAO CHÉP MA TRẬN & GỢI Ý HÀNH ĐỘNG'}</span>
                 </button>
               </div>
@@ -690,10 +669,10 @@ export default function App() {
                 <div className="glass-card rounded-2xl p-4 md:p-5 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-title text-lg md:text-xl text-white tracking-wide">
+                      <h3 className="text-lg md:text-xl font-black text-white tracking-tight">
                         YOUR NEXT MOVE · GỢI Ý THỰC HÀNH CỤ THỂ
                       </h3>
-                      <p className="font-sans text-xs md:text-sm text-white/80 mt-0.5">
+                      <p className="text-xs md:text-sm text-white/80 mt-0.5">
                         Dưới đây là 5 task gợi ý cá nhân hóa theo mức vừa chọn. Mỗi task có bước khởi động 24h, đầu ra minh chứng và tiêu chí kiểm chứng.
                       </p>
                     </div>
@@ -711,54 +690,59 @@ export default function App() {
                                 <span className="text-[#5ce1e6]">
                                   <PillarSymbol pillar={item.key} />
                                 </span>
-                                <h4 className="font-title text-base text-white tracking-wide">
+                                <h4 className="font-bold text-base text-white">
                                   {item.pillarEn.toUpperCase()} — {item.pillarVi}
                                 </h4>
                               </div>
-                              <span className="font-sans text-xs text-[#5ce1e6]">
+                              <span className="text-xs text-[#5ce1e6]">
                                 Điểm tự báo cáo: <strong>{item.score}/5</strong>
                               </span>
                             </div>
-                            <span className="text-xs px-2.5 py-1 rounded-full bg-[#5ce1e6]/20 border border-[#5ce1e6]/60 text-[#5ce1e6] font-title tracking-wider shrink-0">
+                            <span className="text-xs px-2.5 py-1 rounded-full bg-[#5ce1e6]/20 border border-[#5ce1e6]/60 text-[#5ce1e6] font-bold shrink-0">
                               {tagLabel}
                             </span>
                           </div>
 
-                          {/* Action Items */}
-                          <div className="space-y-2 text-xs md:text-sm font-sans leading-relaxed">
+                          {/* Action Items with Refined Geometric Symbols */}
+                          <div className="space-y-2 text-xs md:text-sm leading-relaxed">
                             <div className="bg-[#0c4348]/60 border border-[#5ce1e6]/30 rounded-xl p-3">
-                              <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-1">
-                                🎯 TASK THỰC HÀNH CỤ THỂ:
-                              </span>
+                              <div className="flex items-center gap-1.5 font-bold text-xs text-[#5ce1e6] mb-1">
+                                <span className="text-sm">◈</span>
+                                <span>TASK THỰC HÀNH CỤ THỂ:</span>
+                              </div>
                               <p className="text-white/95 font-medium">{step.do}</p>
                             </div>
 
                             <div className="bg-white/10 border-l-4 border-[#5ce1e6] rounded-xl p-3">
-                              <span className="font-title text-xs text-[#5ce1e6] tracking-wider block mb-1">
-                                ⚡ BẮT ĐẦU TRONG 24H:
-                              </span>
+                              <div className="flex items-center gap-1.5 font-bold text-xs text-[#5ce1e6] mb-1">
+                                <span className="text-sm">✦</span>
+                                <span>BẮT ĐẦU TRONG 24H:</span>
+                              </div>
                               <p className="text-white/95">{step.first}</p>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
                               <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
-                                <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
-                                  👥 THAM GIA CLB / NHÓM:
-                                </span>
+                                <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#5ce1e6] mb-0.5">
+                                  <span className="text-xs">●</span>
+                                  <span>THAM GIA CLB / NHÓM:</span>
+                                </div>
                                 <p className="text-white/85 text-xs">{step.club}</p>
                               </div>
                               <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
-                                <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
-                                  📦 ĐẦU RA CẦN NỘP:
-                                </span>
+                                <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#5ce1e6] mb-0.5">
+                                  <span className="text-xs">■</span>
+                                  <span>ĐẦU RA CẦN NỘP:</span>
+                                </div>
                                 <p className="text-white/85 text-xs">{step.proof}</p>
                               </div>
                             </div>
 
                             <div className="rounded-xl bg-black/40 border border-white/15 p-2.5">
-                              <span className="font-title text-[11px] text-[#5ce1e6] tracking-wider block mb-0.5">
-                                🔍 TIÊU CHÍ KIỂM CHỨNG:
-                              </span>
+                              <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#5ce1e6] mb-0.5">
+                                <span className="text-xs">▲</span>
+                                <span>TIÊU CHÍ KIỂM CHỨNG:</span>
+                              </div>
                               <p className="text-white/85 text-xs">{step.check}</p>
                             </div>
                           </div>
@@ -771,19 +755,15 @@ export default function App() {
                 {/* Self Reflection Prompt Box */}
                 <div className="glass-card rounded-2xl p-4 md:p-5 space-y-3 border-[#5ce1e6]/45">
                   <div className="flex items-center gap-2">
-                    <span className="text-[#5ce1e6]">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                    </span>
-                    <h4 className="font-title text-base text-[#5ce1e6] tracking-wide">
+                    <span className="text-[#5ce1e6] text-lg">✦</span>
+                    <h4 className="font-bold text-base text-[#5ce1e6]">
                       CÂU HỎI TỰ PHẢN TƯ DÀNH CHO BẠN
                     </h4>
                   </div>
-                  <p className="font-sans text-sm md:text-base text-white/95 leading-relaxed bg-[#0c4348]/70 border border-[#5ce1e6]/30 rounded-xl p-3.5">
+                  <p className="text-sm md:text-base text-white/95 leading-relaxed bg-[#0c4348]/70 border border-[#5ce1e6]/30 rounded-xl p-3.5">
                     “Với năng lực bạn muốn phát triển nhất, sản phẩm hoặc phản hồi nào trong <strong>30 ngày tới</strong> sẽ chứng minh rằng bạn đã thực sự thực hành?”
                   </p>
-                  <p className="font-sans text-xs text-white/75 leading-relaxed">
+                  <p className="text-xs text-white/75 leading-relaxed">
                     <strong>Lưu ý phương pháp:</strong> Đây là hoạt động tự phản tư nhanh, không phải công cụ đánh giá năng lực chuẩn hóa, chứng nhận kỹ năng hay dự báo tuyển dụng. Hãy chọn 01 task phù hợp nhất với mục tiêu của bạn để bắt đầu ngay!
                   </p>
                 </div>
@@ -794,21 +774,17 @@ export default function App() {
                     href="https://www.helenlamhien.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary-glow font-title text-sm md:text-base py-4 px-4 rounded-2xl flex items-center justify-center gap-2 no-underline text-center tracking-wider"
+                    className="btn-primary-glow font-bold text-sm md:text-base py-4 px-4 rounded-2xl flex items-center justify-center gap-2 no-underline text-center"
                   >
                     <span>TRUY CẬP HELENLAMHIEN.COM</span>
-                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 3h7v7m0-7L10 14m-4-7H4a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1v-2" />
-                    </svg>
+                    <span className="text-lg">↗</span>
                   </a>
                   <button
                     type="button"
                     onClick={startNewSession}
-                    className="py-4 px-4 rounded-2xl border border-[#5ce1e6]/50 bg-black/50 text-white font-title text-sm md:text-base tracking-wider hover:bg-[#0c4348] transition inline-flex items-center justify-center gap-2"
+                    className="py-4 px-4 rounded-2xl border border-[#5ce1e6]/50 bg-black/50 text-white font-bold text-sm md:text-base hover:bg-[#0c4348] transition inline-flex items-center justify-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
+                    <span className="text-base">↺</span>
                     <span>LÀM LẠI BÀI TỰ PHẢN TƯ</span>
                   </button>
                 </div>

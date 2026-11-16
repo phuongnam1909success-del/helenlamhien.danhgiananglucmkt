@@ -7,43 +7,46 @@ export const PillarSymbol: React.FC<{ pillar: PillarKey; className?: string }> =
 }) => {
   switch (pillar) {
     case 'customer_thinking':
+      // Concentric focus symbol (Thấu hiểu khách hàng / Target Focus)
       return (
-        <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="9" />
-          <circle cx="12" cy="12" r="4" />
-          <path strokeLinecap="round" d="M12 3v2m0 14v2M3 12h2m14 0h2" />
+          <circle cx="12" cy="12" r="4" fill="currentColor" fillOpacity="0.25" />
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" />
         </svg>
       );
     case 'execution':
+      // Forward momentum geometric delta / arrow symbol (Thực thi Marketing / Action & Drive)
       return (
-        <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09zM12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"
-          />
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 2L20.5 19.5L12 15.5L3.5 19.5L12 2Z" fill="currentColor" fillOpacity="0.2" strokeLinejoin="round" />
         </svg>
       );
     case 'data_literacy':
+      // 4-Quadrant Matrix Symbol (Phân tích dữ liệu / Data & Metrics)
       return (
-        <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 20h18M7 16v-4m5 4V8m5 8V5" />
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="currentColor" fillOpacity="0.15" />
+          <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="currentColor" fillOpacity="0.35" />
+          <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="currentColor" fillOpacity="0.25" />
+          <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" fill="currentColor" fillOpacity="0.75" />
         </svg>
       );
     case 'ai_literacy':
+      // 4-Point Starburst Sparkle Symbol (Ứng dụng AI / Intelligence & Spark)
       return (
-        <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <rect x="6" y="6" width="12" height="12" rx="2" />
-          <path strokeLinecap="round" d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4" />
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 1C12 7.075 7.075 12 1 12C7.075 12 12 16.925 12 23C12 16.925 16.925 12 23 12C16.925 12 12 7.075 12 1Z" />
         </svg>
       );
     case 'learning_agility':
+      // Infinite Learning Loop Symbol (Phối hợp & Học hỏi / Continuous Growth)
       return (
-        <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            d="M18.178 8c5.096 0 5.096 8 0 8-3.082 0-4.887-3.13-6.178-5.334C10.709 8.463 8.904 8 5.822 8c-5.096 0-5.096 8 0 8 3.082 0 4.887-3.13 6.178-5.334C13.291 12.87 15.096 16 18.178 16"
           />
         </svg>
       );
@@ -52,7 +55,7 @@ export const PillarSymbol: React.FC<{ pillar: PillarKey; className?: string }> =
 
 export const CheckSymbol: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
